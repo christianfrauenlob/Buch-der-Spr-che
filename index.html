@@ -402,6 +402,102 @@ table.doodle .th-sum {
 .block-name { font-size: 12px; color: var(--text); margin-top: 2px; line-height: 1.3; }
 
 /* ══════════════════════════════════════════
+   TAB 5: LESEPLAN
+══════════════════════════════════════════ */
+#today-banner {
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #fff8eb 0%, var(--green-bg) 100%);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex-shrink: 0;
+}
+#today-banner.inactive { background: var(--bg2); }
+.today-label { font-family: var(--ff-disp); font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.today-chapter { font-family: var(--ff-disp); font-size: 16px; color: var(--accent); }
+.today-hint { font-size: 13px; color: var(--muted); font-style: italic; flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#jump-today-btn {
+  padding: 6px 13px; border-radius: 7px; border: none;
+  background: var(--accent); color: #fff; font-family: var(--ff-body);
+  font-size: 14px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: opacity var(--trans);
+}
+#jump-today-btn:hover { opacity: .85; }
+
+#plan-list-wrap { overflow-y: auto; flex: 1; padding: 8px 18px 20px; }
+#plan-list-wrap::-webkit-scrollbar { width: 5px; }
+#plan-list-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.plan-week-block { margin-bottom: 6px; }
+.plan-week-heading {
+  font-family: var(--ff-disp); font-size: 11px; color: var(--accent);
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 12px 4px 5px; border-bottom: 1px solid var(--bg3); margin-bottom: 4px;
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.plan-week-subtitle { font-family: var(--ff-body); font-size: 12px; color: var(--muted); letter-spacing: 0; text-transform: none; font-style: italic; }
+
+.plan-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 8px; border-radius: 7px; margin-bottom: 2px;
+  cursor: pointer; border: 1.5px solid transparent;
+  transition: background var(--trans);
+}
+.plan-row:hover { background: var(--bg2); }
+.plan-row.is-today  { background: var(--green-bg); border-color: var(--green-mid); }
+.plan-row.is-past   { opacity: .6; }
+.plan-row.is-done   { opacity: .5; }
+
+.plan-date {
+  font-family: var(--ff-disp); font-size: 11px; color: var(--muted);
+  min-width: 86px; line-height: 1.35;
+}
+.plan-date .wd { font-size: 10px; color: var(--border); }
+.plan-row.is-today .plan-date { color: var(--green); }
+
+.plan-chs {
+  font-family: var(--ff-disp); font-size: 13px; color: var(--accent);
+  min-width: 80px; white-space: nowrap;
+}
+.plan-row.is-today .plan-chs { color: var(--green); font-weight: 600; }
+
+.plan-note { font-size: 13px; color: var(--muted); flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.plan-row.is-today .plan-note { color: var(--text); }
+
+.today-tag {
+  font-family: var(--ff-disp); font-size: 9px; letter-spacing: .07em;
+  background: var(--green-mid); color: #fff; padding: 2px 6px; border-radius: 4px;
+  text-transform: uppercase; flex-shrink: 0;
+}
+
+.plan-check {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid var(--border); background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; cursor: pointer; color: transparent;
+  transition: all var(--trans);
+}
+.plan-check:hover { border-color: var(--green-mid); color: var(--green-mid); }
+.plan-check.checked { background: var(--green-mid); border-color: var(--green-mid); color: #fff; }
+
+.plan-progress {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 8px 4px; font-size: 13px; color: var(--muted);
+}
+.plan-progress-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.plan-progress-fill { height: 100%; background: linear-gradient(90deg, var(--green-mid), var(--accent2)); border-radius: 2px; transition: width .4s; }
+
+/* reader chip */
+#reader-today-chip {
+  display: none; align-items: center; gap: 8px;
+  padding: 7px 18px; background: var(--green-bg);
+  border-bottom: 1px solid var(--green-mid);
+  font-size: 13px; flex-shrink: 0; cursor: pointer;
+}
+#reader-today-chip.visible { display: flex; }
+#reader-today-chip strong { font-family: var(--ff-disp); color: var(--green); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+#reader-today-chip span { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#reader-today-chip .chip-jump { font-size: 12px; color: var(--green); flex-shrink: 0; }
+
+/* ══════════════════════════════════════════
    MODALS
 ══════════════════════════════════════════ */
 .modal-overlay {
@@ -540,6 +636,7 @@ textarea.code-ta {
   <button class="tab-btn" data-tab="vote">✓ Meine Wahl <span class="t-badge" id="my-badge">0</span></button>
   <button class="tab-btn" data-tab="auswertung">⊞ Auswertung <span class="t-badge" id="grp-badge">0</span></button>
   <button class="tab-btn" data-tab="export">📄 Konsens</button>
+  <button class="tab-btn" data-tab="plan">📅 Plan</button>
 </div>
 
 <!-- ══════════ CHAPTER PICKER ══════════ -->
@@ -550,6 +647,11 @@ textarea.code-ta {
 
   <!-- TAB 1: READER -->
   <div class="tab-panel active" id="panel-reader">
+    <div id="reader-today-chip">
+      <strong id="chip-label">HEUTE</strong>
+      <span id="chip-text"></span>
+      <span class="chip-jump">→ Plan</span>
+    </div>
     <div id="reader-viewport">
       <div id="chapters-track"></div>
     </div>
@@ -619,6 +721,21 @@ textarea.code-ta {
     </div>
   </div>
 
+  <!-- TAB 5: LESEPLAN -->
+  <div class="tab-panel" id="panel-plan" style="flex-direction:column;">
+    <div id="today-banner" class="inactive">
+      <div>
+        <div class="today-label">Heute zu lesen</div>
+        <div class="today-chapter" id="today-ch-label">–</div>
+      </div>
+      <div class="today-hint" id="today-hint"></div>
+      <button id="jump-today-btn">→ Zum Kapitel</button>
+    </div>
+    <div id="plan-list-wrap">
+      <div id="plan-list"></div>
+    </div>
+  </div>
+
 </div><!-- end #main -->
 
 <!-- ══════════ BOTTOM BAR ══════════ -->
@@ -635,9 +752,9 @@ textarea.code-ta {
     <button class="btn btn-outline btn-sm" id="import-code-btn">← Code laden</button>
     <button class="btn btn-primary btn-sm" id="gen-code-btn">Code generieren →</button>
   </div>
-  <!-- Auswertung / Export (hidden initially) -->
+  <!-- Auswertung / Export / Plan (hidden initially) -->
   <div id="bb-other" style="display:none;flex:1;align-items:center;justify-content:center;">
-    <span style="font-size:13px;color:var(--muted);">Codes links einfügen → Matrix erscheint automatisch</span>
+    <span style="font-size:13px;color:var(--muted);" id="bb-other-text">Codes links einfügen → Matrix erscheint automatisch</span>
   </div>
 </div>
 
@@ -728,6 +845,9 @@ let pickerOpen = false;
 let sortMode = 'votes';
 let minVotes = 1;
 let participants = [];        // [{name, selections:Set}]
+let readingPlan = {
+  done: new Set()   // set of plan-entry indices (0-based) marked as read
+};
 
 /* ════════════════════════════════════════════
    LOCALSTORAGE PERSISTENCE
@@ -758,7 +878,8 @@ function saveState() {
         name: myName,
         selected: [...mySelected],
         chapter: currentChapter,
-        participants: participants.map(p => ({ name: p.name, selections: [...p.selections] }))
+        participants: participants.map(p => ({ name: p.name, selections: [...p.selections] })),
+        readingPlan: { done: [...readingPlan.done] }
       });
       localStorage.setItem(LS_KEY, payload);
       showSaveIndicator();
@@ -783,6 +904,9 @@ function loadState() {
     if (s.participants) participants   = s.participants.map(p => ({
       name: p.name, selections: new Set(p.selections)
     }));
+    if (s.readingPlan) {
+      readingPlan.done = new Set(s.readingPlan.done || []);
+    }
     return true;
   } catch(e) {
     console.warn('Laden fehlgeschlagen:', e);
@@ -811,8 +935,10 @@ window.addEventListener('DOMContentLoaded', () => {
   goToChapter(currentChapter);
   updateBadges();
 
+  // restore plan UI inputs from state
+  updateReaderChip();
+
   if (!LS_OK) {
-    // localStorage blocked – show persistent warning in user pill
     document.getElementById('user-label').textContent = '⚠ kein Speicher';
     document.getElementById('user-pill').title =
       'localStorage nicht verfügbar. Markierungen gehen beim Schließen verloren.\nPrivatmodus? Browser-Einstellungen prüfen.';
@@ -913,6 +1039,13 @@ function bindEvents() {
     }
     if(e.key==='Escape') { closeMarkedPanel(); closePicker(); document.getElementById('code-modal').classList.remove('open'); }
   });
+
+  // Leseplan
+  document.getElementById('jump-today-btn').onclick = () => {
+    const entry = getTodayEntry();
+    if (entry) { switchTab('reader'); goToChapter(entry.chapters[0]); }
+  };
+  document.getElementById('reader-today-chip').onclick = () => switchTab('plan');
 }
 
 function confirmName() {
@@ -933,17 +1066,17 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`panel-${tab}`).classList.add('active');
 
-  // top bar: show chapter nav only in reader
   document.getElementById('ch-nav').style.display = tab==='reader' ? 'flex' : 'none';
-
-  // bottom bar sections
   document.getElementById('bb-reader').style.display = tab==='reader' ? 'flex' : 'none';
   document.getElementById('bb-vote').style.display = tab==='vote' ? 'flex' : 'none';
-  document.getElementById('bb-other').style.display = (tab==='auswertung'||tab==='export') ? 'flex' : 'none';
+  document.getElementById('bb-other').style.display = (tab==='auswertung'||tab==='export'||tab==='plan') ? 'flex' : 'none';
+  if (tab==='plan') document.getElementById('bb-other-text').textContent = 'Kapitel antippen → direkt springen · ✓ = als gelesen markieren';
+  else document.getElementById('bb-other-text').textContent = 'Codes links einfügen → Matrix erscheint automatisch';
 
   if(tab==='vote') renderVoteList();
   if(tab==='auswertung') renderMatrix();
   if(tab==='export') updateExportPreview();
+  if(tab==='plan') renderPlan();
 }
 
 /* ════════════════════════════════════════════
@@ -990,6 +1123,7 @@ function goToChapter(idx) {
   document.getElementById('progress-bar').style.width = (idx/(TOTAL-1)*100)+'%';
   setTimeout(() => { const p=document.getElementById(`ch-page-${idx}`); if(p) p.scrollTop=0; }, 220);
   document.querySelectorAll('.ch-pick-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  updateReaderChip();
   saveState();
 }
 
@@ -1261,6 +1395,216 @@ async function buildDocx(items, filename, thresh) {
 }
 
 function ts() { return new Date().toLocaleDateString('de-DE').replace(/\./g,'-'); }
+
+/* ════════════════════════════════════════════
+   LESEPLAN – NORMALPLAN (fest)
+   14. April – 16. Mai 2026 · Mo–Fr · 1–2 Kap./Tag
+════════════════════════════════════════════ */
+
+// Each entry: { date, chapters (array of 0-based indices), note }
+const NORMALPLAN = [
+  // ── Woche 1: Einleitung und Frau Weisheit (Kap. 1–6) ──
+  { date:'2026-04-13', chapters:[0],    note:'Prolog · Ruf der Weisheit' },
+  { date:'2026-04-14', chapters:[1],    note:'Suche nach Weisheit' },
+  { date:'2026-04-15', chapters:[2],    note:'Vertrauen und Segen' },
+  { date:'2026-04-16', chapters:[3],    note:'Mahnung des Vaters' },
+  { date:'2026-04-17', chapters:[4,5],  note:'Warnung · Bürgschaft und Faulheit' },
+  // ── Woche 2: Weisheit und Torheit (Kap. 7–12) ──
+  { date:'2026-04-20', chapters:[6],    note:'Die verführende Frau' },
+  { date:'2026-04-21', chapters:[7],    note:'Rede der Weisheit' },
+  { date:'2026-04-22', chapters:[8],    note:'Zwei Einladungen' },
+  { date:'2026-04-23', chapters:[9,10], note:'Erste Sprüche Salomos' },
+  { date:'2026-04-24', chapters:[11],   note:'Gerechtigkeit und Freigebigkeit' },
+  // ── Woche 3: Erste Spruchsammlung I (Kap. 13–19) ──
+  { date:'2026-04-27', chapters:[12],   note:'Klugheit und Hoffnung' },
+  { date:'2026-04-28', chapters:[13],   note:'Herz und Gottesfurcht' },
+  { date:'2026-04-29', chapters:[14,15], note:'Zunge · Pläne und Demut' },
+  { date:'2026-04-30', chapters:[16],   note:'Frieden und Freundschaft' },
+  { date:'2026-05-01', chapters:[17,18], note:'Reden und Herz · Armut' },
+  // ── Woche 4: Erste Spruchsammlung II (Kap. 20–26) ──
+  { date:'2026-05-04', chapters:[19],   note:'König und Recht' },
+  { date:'2026-05-05', chapters:[20],   note:'Gerechtigkeit und Opfer' },
+  { date:'2026-05-06', chapters:[21,22], note:'Name und Demut · Warnungen' },
+  { date:'2026-05-07', chapters:[23],   note:'Weisheit und Tapferkeit' },
+  { date:'2026-05-08', chapters:[24,25], note:'Hiskia-Sammlung · Tor und Fauler' },
+  // ── Woche 5: Schluss (Kap. 27–31) ──
+  { date:'2026-05-11', chapters:[26],   note:'Freundschaft und Klugheit' },
+  { date:'2026-05-12', chapters:[27],   note:'Gesetz, Arme, Gerechte' },
+  { date:'2026-05-13', chapters:[28],   note:'Herrschaft · Züchtigung · Vision' },
+  { date:'2026-05-14', chapters:[29],   note:'Worte Agurs · Zahlensprüche' },
+  { date:'2026-05-15', chapters:[30],   note:'Worte Lemuels · die tüchtige Frau' },
+];
+
+const PLAN_WEEKS = [
+  { label: 'Woche 1',  subtitle: 'Kap. 1–6 · Einleitung und Frau Weisheit',   days: [0,1,2,3,4] },
+  { label: 'Woche 2',  subtitle: 'Kap. 7–12 · Weisheit und Torheit',           days: [5,6,7,8,9] },
+  { label: 'Woche 3',  subtitle: 'Kap. 13–19 · Erste Spruchsammlung',          days: [10,11,12,13,14] },
+  { label: 'Woche 4',  subtitle: 'Kap. 20–26 · Zweite Spruchsammlung',         days: [15,16,17,18,19] },
+  { label: 'Woche 5',  subtitle: 'Kap. 27–31 · Schluss: Agur, Lemuel, Frau',  days: [20,21,22,23,24] },
+];
+
+const WOCHENTAGE = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const MONATE     = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+
+function parseLocalDate(str) {
+  const [y,m,d] = str.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+function fmtDate(d) {
+  return `${WOCHENTAGE[d.getDay()]}, ${d.getDate()}. ${MONATE[d.getMonth()]}`;
+}
+function todayMidnight() {
+  const n = new Date();
+  return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+}
+
+function getTodayEntry() {
+  const td = todayMidnight();
+  return NORMALPLAN.find(e => {
+    const d = parseLocalDate(e.date);
+    return d.getTime() === td.getTime();
+  }) || null;
+}
+
+function chLabel(entry) {
+  return entry.chapters.map(ci => `Kap. ${ci + 1}`).join(' + ');
+}
+
+function updateReaderChip() {
+  const chip  = document.getElementById('reader-today-chip');
+  const entry = getTodayEntry();
+  if (!entry) { chip.classList.remove('visible'); return; }
+  chip.classList.add('visible');
+  document.getElementById('chip-label').textContent = 'HEUTE';
+  document.getElementById('chip-text').textContent  =
+    `${chLabel(entry)} · ${entry.note}`;
+}
+
+function renderPlan() {
+  const td      = todayMidnight();
+  const list    = document.getElementById('plan-list');
+  const banner  = document.getElementById('today-banner');
+  list.innerHTML = '';
+
+  // ── Today banner ─────────────────────────────────────────
+  const todayEntry = getTodayEntry();
+  if (todayEntry) {
+    banner.classList.remove('inactive');
+    document.getElementById('today-ch-label').textContent = chLabel(todayEntry);
+    document.getElementById('today-hint').textContent     = todayEntry.note;
+    document.getElementById('jump-today-btn').style.display = '';
+  } else {
+    banner.classList.add('inactive');
+    const first = parseLocalDate(NORMALPLAN[0].date);
+    const last  = parseLocalDate(NORMALPLAN[NORMALPLAN.length - 1].date);
+    if (td < first) {
+      document.getElementById('today-ch-label').textContent = 'Leseplan beginnt ' + fmtDate(first);
+      document.getElementById('today-hint').textContent     = '';
+    } else if (td > last) {
+      document.getElementById('today-ch-label').textContent = 'Normalplan abgeschlossen ✓';
+      document.getElementById('today-hint').textContent     = 'Trinitatis: 31. Mai 2026';
+    } else {
+      document.getElementById('today-ch-label').textContent = 'Kein Lesetag heute';
+      document.getElementById('today-hint').textContent     = 'Wochenende – weiter am Montag';
+    }
+    document.getElementById('jump-today-btn').style.display = 'none';
+  }
+
+  // ── Progress bar ─────────────────────────────────────────
+  const doneCount = readingPlan.done.size;
+  const total     = NORMALPLAN.length;
+  const progWrap  = document.createElement('div');
+  progWrap.className = 'plan-progress';
+  progWrap.innerHTML = `
+    <span>${doneCount} / ${total} Tage gelesen</span>
+    <div class="plan-progress-bar">
+      <div class="plan-progress-fill" style="width:${Math.round(doneCount/total*100)}%"></div>
+    </div>
+    <span>${Math.round(doneCount/total*100)} %</span>`;
+  list.appendChild(progWrap);
+
+  // ── Weeks ─────────────────────────────────────────────────
+  PLAN_WEEKS.forEach(week => {
+    const block = document.createElement('div');
+    block.className = 'plan-week-block';
+
+    const heading = document.createElement('div');
+    heading.className = 'plan-week-heading';
+    heading.innerHTML = `<span>${week.label}</span><span class="plan-week-subtitle">${week.subtitle}</span>`;
+    block.appendChild(heading);
+
+    week.days.forEach(idx => {
+      const entry   = NORMALPLAN[idx];
+      const d       = parseLocalDate(entry.date);
+      const isToday = d.getTime() === td.getTime();
+      const isPast  = d < td && !isToday;
+      const isDone  = readingPlan.done.has(idx);
+
+      const row = document.createElement('div');
+      row.className = 'plan-row'
+        + (isToday              ? ' is-today'  : '')
+        + (isPast && !isDone    ? ' is-past'   : '')
+        + (isDone && !isToday   ? ' is-done'   : '');
+
+      // Date
+      const dateDiv = document.createElement('div');
+      dateDiv.className = 'plan-date';
+      dateDiv.innerHTML = `${fmtDate(d)}<span class="wd">${d.getFullYear()}</span>`;
+
+      // Chapters
+      const chDiv = document.createElement('div');
+      chDiv.className = 'plan-chs';
+      chDiv.textContent = chLabel(entry);
+
+      // Note
+      const noteDiv = document.createElement('div');
+      noteDiv.className = 'plan-note';
+      noteDiv.textContent = entry.note;
+
+      // Today badge
+      if (isToday) {
+        const tag = document.createElement('span');
+        tag.className = 'today-tag';
+        tag.textContent = 'Heute';
+        row.appendChild(dateDiv);
+        row.appendChild(chDiv);
+        row.appendChild(noteDiv);
+        row.appendChild(tag);
+      } else {
+        row.appendChild(dateDiv);
+        row.appendChild(chDiv);
+        row.appendChild(noteDiv);
+      }
+
+      // Check button
+      const check = document.createElement('button');
+      check.className = 'plan-check' + (isDone ? ' checked' : '');
+      check.title  = isDone ? 'Als ungelesen markieren' : 'Als gelesen markieren';
+      check.textContent = '✓';
+      check.onclick = e => {
+        e.stopPropagation();
+        isDone ? readingPlan.done.delete(idx) : readingPlan.done.add(idx);
+        saveState(); renderPlan();
+      };
+      row.appendChild(check);
+
+      // Click row → jump to first chapter
+      row.addEventListener('click', () => {
+        switchTab('reader');
+        goToChapter(entry.chapters[0]);
+      });
+
+      block.appendChild(row);
+    });
+    list.appendChild(block);
+  });
+
+  // Footer note
+  const foot = document.createElement('div');
+  foot.style.cssText = 'text-align:center;color:var(--muted);font-size:12px;padding:14px 0 4px;font-style:italic';
+  foot.textContent = 'Normalplan · 13. Apr – 15. Mai 2026 · 25 Lesetage · Puffer vor Trinitatis (31. Mai)';
+  list.appendChild(foot);
+}
 
 /* ════════════════════════════════════════════
    TOAST
