@@ -734,28 +734,68 @@ let participants = [];        // [{name, selections:Set}]
 ════════════════════════════════════════════ */
 const LS_KEY = 'sprueche_state_v1';
 
-function saveState() {
+// Check once at startup whether localStorage is usable at all
+function lsAvailable() {
   try {
-    localStorage.setItem(LS_KEY, JSON.stringify({
-      name: myName,
-      selected: [...mySelected],
-      chapter: currentChapter,
-      participants: participants.map(p => ({ name: p.name, selections: [...p.selections] }))
-    }));
-  } catch(e) { /* quota exceeded o.ä. – still funktionieren */ }
+    const t = '__ls_test__';
+    localStorage.setItem(t, '1');
+    localStorage.removeItem(t);
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+const LS_OK = lsAvailable();
+
+let _saveTimer = null;
+function saveState() {
+  if (!LS_OK) return;
+  // debounce: don't hammer localStorage on rapid taps
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    try {
+      const payload = JSON.stringify({
+        name: myName,
+        selected: [...mySelected],
+        chapter: currentChapter,
+        participants: participants.map(p => ({ name: p.name, selections: [...p.selections] }))
+      });
+      localStorage.setItem(LS_KEY, payload);
+      showSaveIndicator();
+    } catch(e) {
+      console.warn('Speichern fehlgeschlagen:', e);
+    }
+  }, 300);
 }
 
 function loadState() {
+  if (!LS_OK) {
+    console.warn('localStorage nicht verfügbar (Privatmodus oder Browser-Einstellung).');
+    return false;
+  }
   try {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return false;
     const s = JSON.parse(raw);
-    if (s.name)        myName        = s.name;
-    if (s.selected)    mySelected    = new Set(s.selected);
-    if (s.chapter)     currentChapter = s.chapter;
-    if (s.participants) participants = s.participants.map(p => ({ name: p.name, selections: new Set(p.selections) }));
+    if (s.name)         myName         = s.name;
+    if (s.selected)     mySelected     = new Set(s.selected);
+    if (typeof s.chapter === 'number') currentChapter = s.chapter;
+    if (s.participants) participants   = s.participants.map(p => ({
+      name: p.name, selections: new Set(p.selections)
+    }));
     return true;
-  } catch(e) { return false; }
+  } catch(e) {
+    console.warn('Laden fehlgeschlagen:', e);
+    return false;
+  }
+}
+
+function showSaveIndicator() {
+  // tiny green flash in the reset button to confirm save
+  const btn = document.getElementById('reset-btn');
+  if (!btn) return;
+  btn.style.color = 'var(--green-mid)';
+  setTimeout(() => { btn.style.color = ''; }, 800);
 }
 
 /* ════════════════════════════════════════════
@@ -771,6 +811,16 @@ window.addEventListener('DOMContentLoaded', () => {
   goToChapter(currentChapter);
   updateBadges();
 
+  if (!LS_OK) {
+    // localStorage blocked – show persistent warning in user pill
+    document.getElementById('user-label').textContent = '⚠ kein Speicher';
+    document.getElementById('user-pill').title =
+      'localStorage nicht verfügbar. Markierungen gehen beim Schließen verloren.\nPrivatmodus? Browser-Einstellungen prüfen.';
+    document.getElementById('user-pill').style.borderColor = '#d97706';
+    document.getElementById('name-input').focus();
+    return;
+  }
+
   if (hadState && myName) {
     document.getElementById('user-label').textContent = myName;
     document.getElementById('name-input').value = myName;
@@ -779,7 +829,7 @@ window.addEventListener('DOMContentLoaded', () => {
       renderParticipantList();
       document.getElementById('grp-badge').textContent = participants.length;
     }
-    showToast(`Willkommen zurück, ${myName} – ${mySelected.size} Verse gespeichert.`);
+    showToast(`Willkommen zurück, ${myName} – ${mySelected.size} Verse geladen.`);
   } else {
     document.getElementById('name-input').focus();
   }
